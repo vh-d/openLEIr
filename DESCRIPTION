@@ -1,0 +1,14 @@
+Package: openLEIr
+Type: Package
+Title: Metadata from LEI codes
+Version: 0.1.0
+Author: Vaclav Hausenblas
+Maintainer: Vaclav Hausenblas <vaclav.hausenblast@gmail.com>
+Description: Interface for accessing metadata of financial entities based on their LEI codes from R
+License: GPLv3
+LazyData: TRUE
+RoxygenNote: 5.0.1
+Imports:
+  curl,
+  jsonlite,
+  reshape2
