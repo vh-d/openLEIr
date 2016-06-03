@@ -21,6 +21,31 @@ openLEIs <- function(lei_codes,
                      showMissing = F,
                      useLEIsAsNames = T) {
 
+  # function to scrape metadata for a single LEI code
+  openLEI <- function(LEI, flatten = TRUE) {
+    req <- curl_fetch_memory(paste0("http://openleis.com/legal_entities/", LEI, ".json"),
+                             handle = h)
+    chr <- rawToChar(req$content)
+    Encoding(chr) <- "UTF-8"
+    entity <- fromJSON(txt = chr)
+
+    if (flatten) {
+      entity <- append(entity, entity$other_names)
+      # entity <- append(entity, entity$other_attributes)
+
+      entity$other_names <- NULL
+      entity$other_attributes <- NULL
+
+      attr(entity, which = "flat") <- TRUE
+    } else {
+      attr(entity, which = "flat") <- FALSE
+    }
+
+    entity <- lapply(entity, function(x) if (is.null(x)) NA else x)
+
+    return(entity)
+  }
+
   # attach/detach curl
   if (!("package:curl" %in% search())) {
     tryCatch(library(curl), error = function(x) {stop(x); cat("Cannot load curl package required for accessing API \n")})
@@ -114,30 +139,5 @@ LEIs2df <- function(lEntities,
   }
 
   return(dfLEI)
-}
-
-# function to scrape metadata for a single LEI code
-openLEI <- function(LEI, flatten = TRUE) {
-  req <- curl_fetch_memory(paste0("http://openleis.com/legal_entities/", LEI, ".json"),
-                           handle = h)
-  chr <- rawToChar(req$content)
-  Encoding(chr) <- "UTF-8"
-  entity <- fromJSON(txt = chr)
-
-  if (flatten) {
-    entity <- append(entity, entity$other_names)
-    # entity <- append(entity, entity$other_attributes)
-
-    entity$other_names <- NULL
-    entity$other_attributes <- NULL
-
-    attr(entity, which = "flat") <- TRUE
-  } else {
-    attr(entity, which = "flat") <- FALSE
-  }
-
-  entity <- lapply(entity, function(x) if (is.null(x)) NA else x)
-
-  return(entity)
 }
 
