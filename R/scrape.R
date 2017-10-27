@@ -48,7 +48,7 @@ openLEIs <- function(lei_codes,
 
   # attach/detach curl
   if (!("package:curl" %in% search())) {
-    tryCatch(library(curl), error = function(x) {stop(x); cat("Cannot load curl package required for accessing API \n")})
+    if (!require(curl)) stop("Cannot load curl package required for accessing API \n")
     on.exit(
       {detach("package:curl", unload=TRUE)}
     )
@@ -56,16 +56,11 @@ openLEIs <- function(lei_codes,
 
   # attach/detach jsonlite
   if (!("package:jsonlite" %in% search())) {
-    tryCatch(library(jsonlite), error = function(x) {stop(x); cat("Cannot load jsonlite package required for parsing JSON \n")})
+    if (!require(jsonlite)) stop("Cannot load jsonlite package required for parsing JSON \n")
     on.exit(
       {detach("package:jsonlite", unload=TRUE)}
     )
   }
-
-  # set proxy
-  orig_proxy <- Sys.getenv("http_proxy")
-  Sys.setenv(http_proxy = proxy)
-  on.exit(Sys.setenv(http_proxy = orig_proxy))
 
   # setup curl options
   h <- new_handle()
@@ -75,7 +70,7 @@ openLEIs <- function(lei_codes,
 
   # apply openLEI to the vector of LEI codes parameter
   lEntities <- sapply(X = lei_codes,
-                      simplify = F,
+                      simplify = FALSE,
                       USE.NAMES = useLEIsAsNames,
                       FUN = openLEI)
 
