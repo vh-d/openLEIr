@@ -16,8 +16,8 @@
 #' LEIs2df(openLEIs(lei_vec), wide = F)
 #' @export
 openLEIs <- function(lei_codes,
-                     showMissing = F,
-                     useLEIsAsNames = T) {
+                     showMissing    = FALSE,
+                     useLEIsAsNames = TRUE) {
 
   # function to scrape metadata for a single LEI code
   openLEI <- function(LEI, flatten = TRUE) {
@@ -96,12 +96,12 @@ LEIs2df <- function(lEntities,
 
   # transform the list of legal entities to a long-shape data.frame
   dfLEI <- reshape2::melt(lEntities[foundLEIs])
-  colnames(dfLEI) <- c("value", "field", ".i")
+  colnames(dfLEI) <- c("value", "field", "lei")
 
   # transform from long-shaped to wide-shaped data.frame if requested
   if (wide) {
     dfLEI <- reshape2::dcast(data = dfLEI,
-                             formula = .i ~ field)
+                             formula = lei ~ field)
   }
 
   return(dfLEI)
