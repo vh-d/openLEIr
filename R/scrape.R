@@ -3,7 +3,6 @@
 #' Scrape attributes of entitities from lei-lookup.com given list of LEI codes
 #'
 #' @param \code{lei_codes} character verctor of LEI codes
-#' @param \code{proxy} proxy settings
 #' @param \code{useLEIsAsNames} TRUE/FALSE -- use LEI as names for resulting list?
 #'
 #' @return list of legal entities with all attributes
@@ -17,7 +16,6 @@
 #' convertEntityList2df(openLEI(lei_vec), wide = F)
 #' @export
 openLEIs <- function(lei_codes,
-                     proxy = paste(getIEProxy(), collapse = ":"),
                      showMissing = F,
                      useLEIsAsNames = T) {
 

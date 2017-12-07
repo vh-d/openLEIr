@@ -4,13 +4,10 @@
 \alias{openLEIs}
 \title{Scrape attributes of entitities from lei-lookup.com given list of LEI codes}
 \usage{
-openLEIs(lei_codes, proxy = paste(getIEProxy(), collapse = ":"),
-  showMissing = F, useLEIsAsNames = T)
+openLEIs(lei_codes, showMissing = F, useLEIsAsNames = T)
 }
 \arguments{
 \item{\code{lei_codes}}{character verctor of LEI codes}
-
-\item{\code{proxy}}{proxy settings}
 
 \item{\code{useLEIsAsNames}}{TRUE/FALSE -- use LEI as names for resulting list?}
 }
@@ -22,10 +19,9 @@ Scrape attributes of entitities from lei-lookup.com given list of LEI codes
 }
 \examples{
 lei_vec <- c("259400DZXF7UJKK2AY35", "some misspelled LEI", "529900LN3S50JPU47S06", "some other LEI")
-openLEI(lei_vec)
-openLEI(lei_vec, showMissing = T)
+openLEIs(lei_vec)
+openLEIs(lei_vec, showMissing = T)
 
 convertEntityList2df(openLEI(lei_vec))
 convertEntityList2df(openLEI(lei_vec), wide = F)
 }
-

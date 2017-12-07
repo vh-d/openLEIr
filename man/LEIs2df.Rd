@@ -17,4 +17,3 @@ data.frame
 \description{
 Transform given list of legal entities from \code{openLEIs} funtion to a data.frame
 }
-
