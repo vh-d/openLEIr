@@ -44,23 +44,7 @@ openLEIs <- function(lei_codes,
     return(entity)
   }
 
-  # attach/detach curl
-  if (!("package:curl" %in% search())) {
-    if (!require(curl)) stop("Cannot load curl package required for accessing API \n")
-    on.exit(
-      {detach("package:curl", unload=TRUE)}
-    )
-  }
-
-  # attach/detach jsonlite
-  if (!("package:jsonlite" %in% search())) {
-    if (!require(jsonlite)) stop("Cannot load jsonlite package required for parsing JSON \n")
-    on.exit(
-      {detach("package:jsonlite", unload=TRUE)}
-    )
-  }
-
-  # setup curl options
+  # setup curl
   h <- new_handle()
   handle_setheaders(h,
                     "Accept" = "application/json",
@@ -97,24 +81,13 @@ openLEIs <- function(lei_codes,
 #' @return data.frame
 #' @export
 LEIs2df <- function(lEntities,
-                    wide = T) {
+                    wide = TRUE) {
 
   if (!is.list(lEntities)) {
     stop(substitute(lEntities), " is not a list!")
   }
 
-  # attach/detach reshape2
-  if (!("package:reshape2" %in% search())) {
-    tryCatch(library(reshape2),
-             error = function(x) {
-               stop(x); cat("Cannot load reshape2 package required for converting list to data.frame \n")
-             }
-    )
-
-    on.exit({detach("package:reshape2", unload = TRUE)})
-  }
-
-  # print wearnings when some of the LEIs were not found and thus could not be transformed
+  # print warnings when some of the LEIs were not found and thus could not be transformed
   foundLEIs <- !sapply(lEntities, is.null)
   numOfMissLEIs <- sum(!foundLEIs)
   if (numOfMissLEIs > 0) {
