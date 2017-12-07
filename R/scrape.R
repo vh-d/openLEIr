@@ -12,8 +12,8 @@
 #' openLEIs(lei_vec)
 #' openLEIs(lei_vec, showMissing = T)
 #'
-#' convertEntityList2df(openLEI(lei_vec))
-#' convertEntityList2df(openLEI(lei_vec), wide = F)
+#' LEIs2df(openLEIs(lei_vec))
+#' LEIs2df(openLEIs(lei_vec), wide = F)
 #' @export
 openLEIs <- function(lei_codes,
                      showMissing = F,

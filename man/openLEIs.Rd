@@ -22,6 +22,6 @@ lei_vec <- c("259400DZXF7UJKK2AY35", "some misspelled LEI", "529900LN3S50JPU47S0
 openLEIs(lei_vec)
 openLEIs(lei_vec, showMissing = T)
 
-convertEntityList2df(openLEI(lei_vec))
-convertEntityList2df(openLEI(lei_vec), wide = F)
+LEIs2df(openLEIs(lei_vec))
+LEIs2df(openLEIs(lei_vec), wide = F)
 }
