@@ -1,0 +1,69 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+options(width = 300)
+```
+
+# openLEIr
+
+openLEIr is an R package providing an unofficial API to openleis.com
+
+
+## Installation
+
+You can install openLEIr from GitHub with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("vh-d/openLEIr")
+```
+
+## Example
+
+Use `openLEIs()` to get results for a vector of LEI ids in a list: 
+
+```{r example}
+library(openLEIr)
+
+companies <- openLEIr::openLEIs(c("HWUPKR0MPOU8FGXBT394", "5493006MHB84DD0ZWV18", "549300FI8QIVYMUMBB43"))
+```
+
+
+```{r}
+companies[[1]]$registered_name
+companies[[2]]$registered_name
+```
+
+
+## Reshaping
+
+Convert to tabular data (a data.table) using `LEIs2dt()`. 
+
+In a wide shape
+
+```{r}
+DT <- LEIs2dt(companies, wide = TRUE)
+```
+
+```{r}
+DT[, .(lei, registered_name, legal_form, 
+       headquarter_country_code, headquarter_city, lei_assignment_date)]
+```
+
+Or as a long table:
+
+```{r}
+LEIs2dt(companies, wide = FALSE)
+```
+

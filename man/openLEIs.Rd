@@ -4,7 +4,7 @@
 \alias{openLEIs}
 \title{Scrape attributes of entitities from lei-lookup.com given list of LEI codes}
 \usage{
-openLEIs(lei_codes, showMissing = F, useLEIsAsNames = T)
+openLEIs(lei_codes, showMissing = FALSE, useLEIsAsNames = TRUE)
 }
 \arguments{
 \item{\code{lei_codes}}{character verctor of LEI codes}
