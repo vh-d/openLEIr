@@ -8,7 +8,8 @@ Description: Interface for accessing metadata of financial entities based on the
 License: GPLv3
 LazyData: TRUE
 RoxygenNote: 6.0.1
-Depends:
+Imports:
   curl,
-  jsonlite,
-  reshape2
+  jsonlite
+Suggests:
+  data.table

@@ -1,5 +1,3 @@
-# __ LEI CODES DATABASES ---------------------------------------------------------------
-
 #' Scrape attributes of entitities from lei-lookup.com given list of LEI codes
 #'
 #' @param \code{lei_codes} character verctor of LEI codes
@@ -21,11 +19,11 @@ openLEIs <- function(lei_codes,
 
   # function to scrape metadata for a single LEI code
   openLEI <- function(LEI, flatten = TRUE) {
-    req <- curl_fetch_memory(paste0("http://openleis.com/legal_entities/", LEI, ".json"),
-                             handle = h)
+    req <- curl::curl_fetch_memory(paste0("http://openleis.com/legal_entities/", LEI, ".json"),
+                                   handle = h)
     chr <- rawToChar(req$content)
     Encoding(chr) <- "UTF-8"
-    entity <- fromJSON(txt = chr)
+    entity <- jsonlite::fromJSON(txt = chr)
 
     if (flatten) {
       entity <- append(entity, entity$other_names)
@@ -45,10 +43,11 @@ openLEIs <- function(lei_codes,
   }
 
   # setup curl
-  h <- new_handle()
-  handle_setheaders(h,
-                    "Accept" = "application/json",
-                    "charset" = "utf-8")
+  h <- curl::new_handle()
+
+  curl::handle_setheaders(h,
+                          "Accept" = "application/json",
+                          "charset" = "utf-8")
 
   # apply openLEI to the vector of LEI codes parameter
   lEntities <- sapply(X = lei_codes,
@@ -71,39 +70,5 @@ openLEIs <- function(lei_codes,
 
   # return a list of entities
   return(lEntities)
-}
-
-#' Transform given list of legal entities from \code{openLEIs} funtion to a data.frame
-#'
-#' @param \code{lEntities} list of legal entities as returned by \code{openLEI}.
-#' @param \code{wide} logical; set \code{TRUE} if you want the data.frame to be reshaped from long to wide.
-#'
-#' @return data.frame
-#' @export
-LEIs2df <- function(lEntities,
-                    wide = TRUE) {
-
-  if (!is.list(lEntities)) {
-    stop(substitute(lEntities), " is not a list!")
-  }
-
-  # print warnings when some of the LEIs were not found and thus could not be transformed
-  foundLEIs <- !sapply(lEntities, is.null)
-  numOfMissLEIs <- sum(!foundLEIs)
-  if (numOfMissLEIs > 0) {
-    warning(simpleWarning(message = paste0("There are ", numOfMissLEIs, " LEIs that could not be found in the lei-lookup.com database! Skipping...")))
-  }
-
-  # transform the list of legal entities to a long-shape data.frame
-  dfLEI <- reshape2::melt(lEntities[foundLEIs])
-  colnames(dfLEI) <- c("value", "field", "lei")
-
-  # transform from long-shaped to wide-shaped data.frame if requested
-  if (wide) {
-    dfLEI <- reshape2::dcast(data = dfLEI,
-                             formula = lei ~ field)
-  }
-
-  return(dfLEI)
 }
 
